@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello from our Automated Pipeline!'
+    return 'Hello from version 2!'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
