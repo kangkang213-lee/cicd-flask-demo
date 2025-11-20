@@ -1,0 +1,30 @@
+name: CI Docker Build and Push
+
+# 触发条件：向 main 分支推送代码时触发
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    # 运行环境：Ubuntu 最新版
+    runs-on: ubuntu-latest
+    steps:
+      # 步骤 1：拉取 GitHub 仓库代码到流水线环境
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 步骤 2：登录 Docker Hub（使用仓库密钥）
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 步骤 3：构建 Docker 镜像并推送至 Docker Hub
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .  # 构建上下文：当前仓库根目录
+          push: true  # 启用推送功能
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cicd-flask-demo:latest  # 镜像标签（Docker Hub 仓库名:版本）
